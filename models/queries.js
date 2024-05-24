@@ -41,6 +41,7 @@ async function obtenerEstudiantes() {
   try {
     const sql = {
       text: 'SELECT * FROM estudiantes',
+      rowMode: "array"
     } 
       const response = await pool.query(sql);
       console.log(response.rows)
@@ -57,7 +58,7 @@ async function editarEstudiante(nombre, rut, curso, nivel) {
   try {
     const sql = {
       text:'UPDATE estudiantes SET nombre = $1, curso = $2, nivel = $3 WHERE rut = $4',
-      values: [nombre, curso, nivel, rut]
+      values: [nombre, rut, curso, nivel]
     } 
       const res = await pool.query(sql);
       console.log('Estudiante actualizado:', res.rowCount);

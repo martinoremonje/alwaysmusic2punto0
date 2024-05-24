@@ -27,15 +27,12 @@ export const estudiantes = async (req, res) => {
 };
 
 export const estudianteRut = async (req, res) => {
-    const { rut } = req.query;
+    const { rut } = req.params;
 
     try {
         const estudiante = await obtenerEstudiantePorRut(rut);
-        if (estudiante.length === 0) {
-            res.status(404).send('Estudiante no encontrado');
-        } else {
-            res.json(estudiante);
-        }
+        res.send(estudiante)
+        
     } catch (error) {
         console.error("Se produjo un error:", error);
         res.status(500).send('Error obteniendo estudiante');
@@ -43,19 +40,11 @@ export const estudianteRut = async (req, res) => {
 };
 
 export const editar = async (req, res) => {
-    const { nombre, rut, curso, nivel } = req.query;
-
-    if (!nombre || !rut || !curso || !nivel) {
-        return res.status(400).send('Todos los campos son requeridos');
-    }
-
+    const { nombre, rut, curso, nivel } = req.params;
+    
     try {
-        const rowCount = await editarEstudiante(nombre, rut, curso, nivel);
-        if (rowCount === 0) {
-            res.status(404).send('Estudiante no encontrado');
-        } else {
-            res.send('Estudiante actualizado correctamente');
-        }
+        await editarEstudiante(nombre, rut, curso, nivel);
+        res.send("estudiante actualizado")
     } catch (error) {
         console.error("Se produjo un error:", error);
         res.status(500).send('Error actualizando estudiante');
@@ -66,12 +55,8 @@ export const eliminar = async (req, res) => {
     const { rut } = req.query;
 
     try {
-        const rowCount = await eliminarEstudiante(rut);
-        if (rowCount === 0) {
-            res.status(404).send('Estudiante no encontrado');
-        } else {
-            res.send('Estudiante eliminado correctamente');
-        }
+        await eliminarEstudiante(rut);
+        res.send("estudiante eliminado")
     } catch (error) {
         console.error("Se produjo un error:", error);
         res.status(500).send('Error eliminando estudiante');
